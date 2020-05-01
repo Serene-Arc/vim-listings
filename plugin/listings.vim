@@ -36,7 +36,11 @@ func! FindPrevNum(lineno)
 			" find the number on the line above, if there is one
 			execute 'normal! mq/\%' . ( a:lineno - 1 ) . 'l\v(\_^\s*(\[((_|X|s))\]\s){,1}(\%\s){,1})\zs(\d)*\ze\.' . "\<CR>yw`q"
 		catch
-			let @" = 0
+			try
+				execute 'normal! mq/\%' . ( a:lineno - 2 ) . 'l\v(\_^\s*(\[((_|X|s))\]\s){,1}(\%\s){,1})\zs(\d)*\ze\.' . "\<CR>yw`q"
+			catch
+				let @" = 0
+			endtry
 		endtry
 		if @" > 0
 			let l:i = @" + 1
