@@ -6,11 +6,11 @@ endif
 let g:loaded_listings = 1
 
 
-
-nnoremap <leader>nl :call NumberLine('.', -1)<cr>
-vnoremap <leader>nl :call NumberLine(visualmode(),-1)<cr>
-nnoremap <leader>nnl :call NumberLine('.', 1)<cr>
-vnoremap <leader>nnl :call NumberLine(visualmode(),1)<cr>
+" Stuff for creating numbered lists {{{{
+nnoremap <silent> <leader>nl :call NumberLine('.', -1)<cr>
+vnoremap <silent> <leader>nl :call NumberLine(visualmode(),-1)<cr>
+nnoremap <silent> <leader>nnl :call NumberLine('.', 1)<cr>
+vnoremap <silent> <leader>nnl :call NumberLine(visualmode(),1)<cr>
 
 function! NumberLine(type, first) range
 	let l:first = a:first
@@ -21,7 +21,7 @@ function! NumberLine(type, first) range
 					let l:i = l:first
 					let l:first = -1 
 				else
-					let l:i = FindPrevNum(l:lineno)
+					silent let l:i = FindPrevNum(l:lineno)
 				endif
 				call setline(l:lineno, substitute(getline(l:lineno), '\v(\_^[\t\s\ \[\]_xX%]*)', '\1'.l:i.'. ', ""))
 			endif
@@ -51,3 +51,4 @@ func! FindPrevNum(lineno)
 	endif
 	return l:i
 endfunction
+" }}}}
