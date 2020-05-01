@@ -1,9 +1,9 @@
 " list.vim - Listings
 
-if exists("g:loaded_listings") || &cp || v:version < 800
-	finish
-endif
-let g:loaded_listings = 1
+" if exists("g:loaded_listings") || &cp || v:version < 800
+" 	finish
+" endif
+" let g:loaded_listings = 1
 
 
 " Stuff for creating numbered lists {{{{
@@ -57,9 +57,23 @@ vnoremap <silent> <leader>gl :call DotpointLine()<CR>
 function! DotpointLine() range
 	for l:lineno in range(a:firstline, a:lastline)
 		if getline(l:lineno) !~ '\v(\_^[\t\s\[\]_xX%]*\-.*)'
-			call setline(l:lineno, substitute(getline(l:lineno), '\v(\_^[\t\s\[\]_xX%]*)', '\1- ', ""))
+			call setline(l:lineno, substitute(getline(l:lineno), '\v(\_^[\t\ \s\[\]_xX%]*)', '\1- ', ""))
 		endif
 	endfor
 endfunction
 
 " }}}}
+
+" Stuff for deleting markers {{{{
+
+nnoremap <silent> <leader>dl :call RemoveList()<CR>
+vnoremap <silent> <leader>dl :call RemoveList()<CR>
+
+function! RemoveList() range
+	for l:lineno in range(a:firstline, a:lastline)
+		if getline(l:lineno) =~ '\v(\_^[\[\]%\ \s_X]*)((\-\s)|(\d+\.\s))+.*'
+			echom 'hit'
+			call setline(l:lineno, substitute(getline(l:lineno), '\v(\_^[\s\ \[\]_xX%]*)(\- |\d+\.\ )', '\1', ""))
+		endif
+	endfor
+endfunction
