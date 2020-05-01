@@ -72,7 +72,6 @@ vnoremap <silent> <leader>dl :call RemoveList()<CR>
 function! RemoveList() range
 	for l:lineno in range(a:firstline, a:lastline)
 		if getline(l:lineno) =~ '\v(\_^[\[\]%\ \s_X]*)((\-\s)|(\d+\.\s))+.*'
-			echom 'hit'
 			call setline(l:lineno, substitute(getline(l:lineno), '\v(\_^[\s\ \[\]_xX%]*)(\- |\d+\.\ )', '\1', ""))
 		endif
 	endfor
