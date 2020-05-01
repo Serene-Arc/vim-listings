@@ -77,3 +77,4 @@ function! RemoveList() range
 		endif
 	endfor
 endfunction
+" }}}}
