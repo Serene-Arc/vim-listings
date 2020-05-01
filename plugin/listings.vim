@@ -7,26 +7,22 @@ let g:loaded_listings = 1
 
 
 " Stuff for creating numbered lists {{{{
-nnoremap <silent> <leader>nl :call NumberLine('.', -1)<cr>
-vnoremap <silent> <leader>nl :call NumberLine(visualmode(),-1)<cr>
-nnoremap <silent> <leader>nnl :call NumberLine('.', 1)<cr>
-vnoremap <silent> <leader>nnl :call NumberLine(visualmode(),1)<cr>
+nnoremap <silent> <leader>nl :call NumberLine(-1)<cr>
+vnoremap <silent> <leader>nl :call NumberLine(-1)<cr>
+nnoremap <silent> <leader>nnl :call NumberLine(1)<cr>
+vnoremap <silent> <leader>nnl :call NumberLine(1)<cr>
 
-function! NumberLine(type, first) range
+function! NumberLine(first) range
 	let l:first = a:first
 	for l:lineno in range(a:firstline, a:lastline)
-		if a:type ==# 'V' || a:type ==# '.'
-			if getline(l:lineno) !~ '\v(\_^[\t\s\ \[\]_xX%]*\d+\..*)'
-				if l:first > 0
-					let l:i = l:first
-					let l:first = -1 
-				else
-					silent let l:i = FindPrevNum(l:lineno)
-				endif
-				call setline(l:lineno, substitute(getline(l:lineno), '\v(\_^[\t\s\ \[\]_xX%]*)', '\1'.l:i.'. ', ""))
+		if getline(l:lineno) !~ '\v(\_^[\t\s\ \[\]_xX%]*\d+\..*)'
+			if l:first > 0
+				let l:i = l:first
+				let l:first = -1 
+			else
+				silent let l:i = FindPrevNum(l:lineno)
 			endif
-		else
-			return 
+			call setline(l:lineno, substitute(getline(l:lineno), '\v(\_^[\t\s\ \[\]_xX%]*)', '\1'.l:i.'. ', ""))
 		endif
 	endfor
 endfunction
@@ -51,4 +47,19 @@ func! FindPrevNum(lineno)
 	endif
 	return l:i
 endfunction
+" }}}}
+
+" Stuff for generic markdown style lists {{{{
+
+nnoremap <silent> <leader>gl :call DotpointLine()<CR>
+vnoremap <silent> <leader>gl :call DotpointLine()<CR>
+
+function! DotpointLine() range
+	for l:lineno in range(a:firstline, a:lastline)
+		if getline(l:lineno) !~ '\v(\_^[\t\s\[\]_xX%]*\-.*)'
+			call setline(l:lineno, substitute(getline(l:lineno), '\v(\_^[\t\s\[\]_xX%]*)', '\1- ', ""))
+		endif
+	endfor
+endfunction
+
 " }}}}
